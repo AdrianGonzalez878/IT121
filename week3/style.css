@@ -1,0 +1,39 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+}
+
+p {
+    margin: 5px 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Additional styles for more visual appeal */
+body {
+    background-color: #f4f4f4;
+}
+
+p {
+    padding: 8px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+/* Style for total, lowest, highest, and average scores */
+p.total, p.lowest, p.highest, p.average {
+    font-weight: bold;
+}
+
+/* Style for individual student scores */
+p.student {
+    color: #007bff; /* Blue color for student scores */
+}
+

@@ -1,0 +1,56 @@
+<!--Made by Adrian Gonzalez-->
+<!--Date: 10/02/20024 -->
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Making the grade</title>
+      <link rel="stylesheet" type="text/css" href="style.css">
+
+  </head>
+  <body>
+    <h1>Making the grade</h1>
+  <script>
+      let grades = "jim|25, sue|32, mary|34, ann|22, ted|28, frank|15, lisa|19, mike|30, ahn|26, vishaya|27";
+
+      // Split the grades string into an array of students
+      let studentsArray = grades.split(", ");
+
+      // Variables to store total, lowest, highest, and sum of scores
+      let totalStudents = studentsArray.length;
+      let lowestScore = Infinity;
+      let highestScore = -Infinity;
+      let sumOfScores = 0;
+
+      // Display each student name and score
+      for (let i = 0; i < studentsArray.length; i++) {
+          // Split each student into name and score
+          let [name, score] = studentsArray[i].split("|");
+          // Capitalize the first letter of the student name
+          name = name.charAt(0).toUpperCase() + name.slice(1);
+
+          // Parse the score as an integer
+          score = parseInt(score);
+
+          // Update variables for lowest, highest, and sum of scores
+          lowestScore = Math.min(lowestScore, score);
+          highestScore = Math.max(highestScore, score);
+          sumOfScores += score;
+
+          // Display each student's name and score
+          document.write(`<p>${name} - ${score}</p>`);
+      }
+
+      // Calculate the average score
+      let averageScore = sumOfScores / totalStudents;
+
+      // Displaying  information
+      document.write(`<p>Total Students: ${totalStudents}</p>`);
+      document.write(`<p>Lowest Score: ${lowestScore}</p>`);
+      document.write(`<p>Highest Score: ${highestScore}</p>`);
+      document.write(`<p>Average Score: ${averageScore.toFixed(2)}</p>`);
+  </script>
+
+  </body>
+  </html>

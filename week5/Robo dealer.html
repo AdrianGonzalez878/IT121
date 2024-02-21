@@ -1,0 +1,88 @@
+
+<!--Made it by Adrian Gonzalez-->
+<!--DATE: 02/21/2024-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robo Dealer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        #cardDisplay {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Robo Dealer</h1>
+    <button onclick="drawHand()">Draw Hand</button>
+    <div id="cardDisplay"></div>
+
+    <script>
+        // Card object definition
+        function Card(value, suit) {
+            this.value = value;
+            this.suit = suit;
+        }
+
+        // Function to generate a deck of 52 cards
+        function generateDeck() {
+            var deck = [];
+            var suits = ['Hearts', 'Spades', 'Diamonds', 'Clubs'];
+            var values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
+
+            for (var i = 0; i < suits.length; i++) {
+                for (var j = 0; j < values.length; j++) {
+                    deck.push(new Card(values[j], suits[i]));
+                }
+            }
+
+            return deck;
+        }
+
+        // Function to randomly draw 5 cards from the deck
+        function drawHand() {
+            var deck = generateDeck();
+            var hand = [];
+
+            for (var i = 0; i < 5; i++) {
+                var randomIndex = Math.floor(Math.random() * deck.length);
+                var drawnCard = deck.splice(randomIndex, 1)[0]; // Remove the drawn card from the deck
+                hand.push(drawnCard);
+            }
+
+            displayHand(hand);
+        }
+
+        // Function to display information about the drawn cards
+        function displayHand(hand) {
+            var cardDisplay = document.getElementById('cardDisplay');
+            cardDisplay.innerHTML = '';
+
+            for (var i = 0; i < hand.length; i++) {
+                var cardName = getCardName(hand[i]);
+                var cardInfo = document.createElement('p');
+                cardInfo.textContent = cardName;
+                cardDisplay.appendChild(cardInfo);
+            }
+        }
+
+        // Function to get the display name of a card
+        function getCardName(card) {
+            var value = (card.value === '10') ? '10' : card.value.charAt(0);
+            return value + ' of ' + card.suit;
+        }
+    </script>
+</body>
+</html>

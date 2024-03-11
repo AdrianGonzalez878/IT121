@@ -1,0 +1,131 @@
+<html>
+<head>
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    <style>
+    .over {
+        background-color: orange;
+    }
+    .selected {
+        background-color: green;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr.even {
+        background-color: #f9f9f9;
+    }
+    tr.odd {
+        background-color: #ffffff;
+    }
+    tr:hover {
+        background-color: #c4e7ff;
+    }
+    </style>
+</head>
+
+
+<body>
+    <div id="buttons"></div>
+    <table border='1' id="charactersTable">
+        <tr>
+            <th>name</th>
+            <th>role</th>
+            <th>house</th>
+            <th>gender</th>
+            <th>alignment</th>
+        </tr>
+    </table>
+    <button id="resetBtn">reset</button>
+
+    <script>
+        // List of Harry Potter characters
+        let characters = [
+            { name: "Albus Dumbledore", role: "staff", house: "Gryffindor", gender: "m", alignment: "good" },
+            { name: "Nymphadora Tonks", role: "", house: "Hufflepuff", gender: "f", alignment: "good" },
+            { name: "Ron Weasley", role: "student", house: "Gryffindor", gender: "m", alignment: "good" },
+            { name: "Ginny Weasley", role: "student", house: "Gryffindor", gender: "f", alignment: "good" },
+            { name: "Hermione Granger", role: "student", house: "Gryffindor", gender: "f", alignment: "good" },
+            { name: "Mad-eye Moody", role: "staff", house: "", gender: "m", alignment: "good" },
+            { name: "Prof McGonagall", role: "staff", house: "Gryffindor", gender: "f", alignment: "good" },
+            { name: "Harry Potter", role: "student", house: "Gryffindor", gender: "m", alignment: "good" },
+            { name: "Draco Malfoy", role: "student", house: "Slytherin", gender: "m", alignment: "evil" },
+            { name: "Hagrid", role: "staff", house: "Gryffindor", gender: "m", alignment: "good" },
+            { name: "Luna Lovegood", role: "student", house: "Ravenclaw", gender: "f", alignment: "good" },
+            { name: "Voldemort", role: "", house: "Slytherin", gender: "m", alignment: "evil" },
+            { name: "Bellatrix Lestrange", role: "", house: "Slytherin", gender: "f", alignment: "evil" },
+            { name: "Severus Snape", role: "staff", house: "Slytherin", gender: "m", alignment: "?" },
+            ];
+
+        $(document).ready(function () {
+            // Function to populate buttons for each 'house' value
+            function populateButtons() {
+                let houses = [...new Set(characters.map(character => character.house))];
+                houses.forEach(house => {
+                    $('#buttons').append(`<button class="houseBtn" data-house="${house}">${house}</button>`);
+                });
+                // Add a button for resetting
+                $('#buttons').append(`<button class="houseBtn" data-house="all">Show All</button>`);
+            }
+
+            // Function to update table rows based on selected 'house'
+            function filterTableByHouse(selectedHouse) {
+                $('#charactersTable tr:gt(0)').hide(); // Hide all rows except the header
+                if (selectedHouse !== 'all') {
+                    $(`.house-${selectedHouse}`).show(); // Show rows that match the selected 'house'
+                } else {
+                    $('#charactersTable tr:gt(0)').show(); // Show all rows if 'Show All' is selected
+                }
+                // Update row colors after visibility is changed on all rows
+                updateRowColors();
+            }
+
+            // Function to update row colors after visibility is changed on all rows
+            function updateRowColors() {
+                let visibleRows = $('#charactersTable tr:visible:gt(0)');
+                visibleRows.each(function (index) {
+                    $(this).removeClass('even odd').addClass(index % 2 === 0 ? 'even' : 'odd');
+                });
+            }
+
+            // Click handler for house buttons
+            $(document).on('click', '.houseBtn', function () {
+                let selectedHouse = $(this).data('house');
+                filterTableByHouse(selectedHouse);
+            });
+
+            // Click handler to reset the table
+            $('#resetBtn').click(function () {
+                $('#charactersTable tr:gt(0)').show(); // Show all rows except the header
+                updateRowColors();
+            });
+
+            // Populate buttons and initial table
+            populateButtons();
+            characters.forEach((character, index) => {
+                $('#charactersTable').append(`
+                    <tr class="house-${character.house} ${index % 2 === 0 ? 'even' : 'odd'}">
+                        <td>${character.name}</td>
+                        <td>${character.role}</td>
+                        <td>${character.house}</td>
+                        <td>${character.gender}</td>
+                        <td>${character.alignment}</td>
+                    </tr>
+                `);
+            });
+        });
+    </script>
+</body>
+</html>

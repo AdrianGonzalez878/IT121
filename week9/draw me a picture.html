@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canvas Drawing</title>
+<style>
+    canvas {
+        border: 1px solid #000;
+        background-color: #f0f0f0;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="800" height="600"></canvas>
+
+<script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    ctx.save();
+
+    // Draw sky 
+    ctx.fillStyle = "#87CEEB";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw grass
+    ctx.fillStyle = "#7CFC00";
+    ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+
+    // Draw sun
+    ctx.beginPath();
+    ctx.arc(100, 100, 50, 0, Math.PI * 2);
+    ctx.fillStyle = "#FFD700";
+    ctx.fill();
+    ctx.closePath();
+
+    // Draw clouds
+    drawCloud(200, 150);
+    drawCloud(500, 100);
+
+    // Animation
+    let birdX = -100;
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Redraw sky and grass
+        ctx.fillStyle = "#87CEEB";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#7CFC00";
+        ctx.fillRect(0, canvas.height - 100, canvas.width, 100);
+
+        // Redraw sun
+        ctx.beginPath();
+        ctx.arc(100, 100, 50, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFD700";
+        ctx.fill();
+        ctx.closePath();
+
+        // Redraw clouds
+        drawCloud(200, 150);
+        drawCloud(500, 100);
+
+        // Draw bird
+        drawBird(birdX, 300);
+        birdX += 2; // Move bird horizontally
+
+        // Reset bird's position
+        if (birdX > canvas.width + 100) {
+            birdX = -100;
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+
+    function drawCloud(x, y) {
+        ctx.beginPath();
+        ctx.arc(x, y, 40, 0, Math.PI * 2);
+        ctx.arc(x + 50, y, 40, 0, Math.PI * 2);
+        ctx.arc(x + 100, y, 40, 0, Math.PI * 2);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawBird(x, y) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + 20, y - 10);
+        ctx.lineTo(x + 30, y);
+        ctx.lineTo(x + 20, y + 10);
+        ctx.closePath();
+        ctx.fillStyle = "#000000";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x + 30, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "#000000";
+        ctx.fill();
+    }
+</script>
+
+</body>
+</html>

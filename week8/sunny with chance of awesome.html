@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5-Day Weather Forecast</title>
+<style>
+/* CSS styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+button {
+    padding: 8px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#forecastContainer {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.forecast-item {
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-item h2 {
+    margin-top: 0;
+}
+
+.forecast-item img {
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>5-Day Weather Forecast</h1>
+
+<form id="weatherForm">
+    <label for="cityInput">Enter City Name (US only):</label>
+    <input type="text" id="cityInput" name="city" required>
+    <button type="submit">Get Forecast</button>
+</form>
+
+<div id="forecastContainer"></div>
+
+<script>
+// JavaScript code
+document.getElementById("weatherForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    let city = document.getElementById("cityInput").value.trim();
+    if (city === "" || !isNaN(city)) {
+        alert("Please enter a valid city name.");
+        return;
+    }
+    getWeatherForecast(city);
+});
+
+function getWeatherForecast(city) {
+    const apiKey = "913f952aa36e9be204d6ebb36aabae05";
+    const apiUrl = `http://api.openweathermap.org/data/2.5/forecast/daily?q=${city},US&cnt=5&appid=${apiKey}`;
+
+    fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        if (data.cod === "200") {
+            displayForecast(data.list);
+        } else {
+            alert("Failed to get forecast data. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching data:", error);
+        alert("An error occurred. Please try again later.");
+    });
+}
+
+function displayForecast(forecastData) {
+    const forecastContainer = document.getElementById("forecastContainer");
+    forecastContainer.innerHTML = "";
+    forecastData.forEach(day => {
+        const date = new Date(day.dt * 1000);
+        const minTemp = kelvinToF(day.temp.min);
+        const maxTemp = kelvinToF(day.temp.max);
+        const humidity = day.humidity;
+        const description = day.weather[0].description;
+        const iconUrl = `http://openweathermap.org/img/wn/${day.weather[0].icon}.png`;
+
+        const forecastItem = document.createElement("div");
+        forecastItem.classList.add("forecast-item");
+        forecastItem.innerHTML = `
+            <h2>${date.toDateString().slice(4)}</h2>
+            <img src="${iconUrl}" alt="${description}">
+            <p>Min Temp: ${minTemp}°F</p>
+            <p>Max Temp: ${maxTemp}°F</p>
+            <p>Humidity: ${humidity}%</p>
+            <p>Description: ${description}</p>
+        `;
+        forecastContainer.appendChild(forecastItem);
+    });
+}
+
+function kelvinToF(value) {
+    let fahrenheit = (((Number(value) - 273.15)*9)/5) + 32;
+    return fahrenheit.toFixed(2);
+}
+</script>
+
+</body>
+</html>
